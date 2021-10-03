@@ -5,12 +5,12 @@
  */
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.5.16 <0.9.0;
+import "./ownable.sol";
 
-contract SimpleBank {
+contract SimpleBank is Ownable{
 
     /* State variables
      */
-    address owner;
     struct _members{
       address _adress;
       uint _balance;
@@ -28,9 +28,7 @@ contract SimpleBank {
 
     // Let's make sure everyone knows who owns the bank, yes, fill in the
     // appropriate visilibility keyword
-    constructor() public {
-     owner = msg.sender;
-    }
+
     /* Events - publicize actions to external listeners
      */
     
@@ -101,13 +99,14 @@ contract SimpleBank {
       // to the user attempting to withdraw. 
       // return the user's balance.
         require (enrolled[msg.sender] == true);
-        require (balances[msg.sender] > withdrawAmount);
+        require (balances[msg.sender] >= withdrawAmount);
       // 1. Use a require expression to guard/ensure sender has enough funds
 
       // 2. Transfer Eth to the sender and decrement the withdrawal amount from
       //    sender's balance
       msg.sender.transfer(withdrawAmount);
       balances[msg.sender] =- withdrawAmount;
+      return balances[msg.sender];
       // 3. Emit the appropriate event for this message
       emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
     }
