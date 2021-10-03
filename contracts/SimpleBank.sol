@@ -51,7 +51,6 @@ contract SimpleBank is Ownable{
     // Added so ether sent to this contract is reverted if the contract fails
     // otherwise, the sender's money is transferred to contract
     function () external payable {
-        revert();
     }
 
     /// @notice Get balance
@@ -105,7 +104,7 @@ contract SimpleBank is Ownable{
       // 2. Transfer Eth to the sender and decrement the withdrawal amount from
       //    sender's balance
       msg.sender.transfer(withdrawAmount);
-      balances[msg.sender] =- withdrawAmount;
+      balances[msg.sender] = balances[msg.sender] - withdrawAmount;
       return balances[msg.sender];
       // 3. Emit the appropriate event for this message
       emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
