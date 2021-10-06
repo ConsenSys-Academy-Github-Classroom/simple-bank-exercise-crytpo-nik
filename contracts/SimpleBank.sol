@@ -36,11 +36,11 @@ contract SimpleBank is Ownable{
     event LogEnrolled(address );
 
     // Add 2 arguments for this event, an accountAddress and an amount
-    event LogDepositMade(address _sender, uint _amount);
+    event LogDepositMade(address accountAddress, uint amount);
 
     // Create an event called LogWithdrawal
     // Hint: it should take 3 arguments: an accountAddress, withdrawAmount and a newBalance 
-    event LogWithdrawal(address _accountAddress, uint _withdrawAmount, uint _newBalance);
+    event LogWithdrawal(address accountAddress, uint withdrawAmount, uint newBalance);
 
     /* Functions
      */
@@ -70,7 +70,7 @@ contract SimpleBank is Ownable{
       // 1. enroll of the sender of this transaction
       enrolled[msg.sender] = true;
       return enrolled[msg.sender];
-      emit  LogEnrolled(msg.sender);
+      emit LogEnrolled(msg.sender);
     }
 
     /// @notice Deposit ether into bank
@@ -105,9 +105,10 @@ contract SimpleBank is Ownable{
       // 2. Transfer Eth to the sender and decrement the withdrawal amount from
       //    sender's balance
       msg.sender.transfer(withdrawAmount);
-      balances[msg.sender] -= withdrawAmount;
-      return balances[msg.sender];
+      balances[msg.sender] = balances[msg.sender] - withdrawAmount;
+      
       // 3. Emit the appropriate event for this message
       emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
+      return balances[msg.sender];
     }
 }
